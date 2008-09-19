@@ -13,3 +13,10 @@ aclocal.m4
 ltmain.sh
 autom4te.cache
 gtk-doc.make
+*~
+config.h
+config.log
+config.status
+json.pc
+stamp*
+.deps
