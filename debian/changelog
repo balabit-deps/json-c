@@ -1,0 +1,6 @@
+json-c (0.7-1) xcb10; urgency=low
+
+  * Initial release
+
+ -- Balazs Scheidler <bazsi@balabit.hu>  Wed, 24 Sep 2008 10:39:05 +0200
+
