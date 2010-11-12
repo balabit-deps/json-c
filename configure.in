@@ -21,8 +21,16 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_FUNC_VPRINTF
 AC_FUNC_MEMCMP
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
+# AC_FUNC_*ALLOC macros are misleading, they check for GNU libc compatible implementations.
+# Tru64 and AIX don't have compatible mallloc/reallocs, but it's not a problem in JSON-C
+case `uname -s` in
+	OSF1|AIX);;
+	*)
+		AC_FUNC_MALLOC
+		AC_FUNC_REALLOC
+	;;
+esac
+
 AC_PROG_LIBTOOL
 AC_CHECK_FUNCS(strndup strerror vsnprintf vasprintf open vsyslog strncasecmp)
 
