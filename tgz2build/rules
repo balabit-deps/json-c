@@ -3,6 +3,11 @@ STAMPDIR=tgz2build/stamps
 
 CONFIGURE_OPTS := --prefix $(ZBS_PREFIX)
 
+ifneq (,$(findstring linux-glibc2.1.3,$(ZBS_DIST)))
+  # syslog-ng needs a C99 standtard compliant C compiler. GCC 2.95 is not compliant so we have to use a home built GCC 3.3 for this.
+  CC=gcc-3.3
+endif
+
 all: binary
 
 binary: setup configure build install
@@ -20,9 +25,9 @@ $(STAMPDIR)/stamp-configure: setup
 
 build:  $(STAMPDIR)/stamp-build
 $(STAMPDIR)/stamp-build: configure
-	cd src/ && $(MAKE)
-	cd include && $(MAKE)
+	$(MAKE)
 	touch $@
+
 install: $(STAMPDIR)/stamp-install
 $(STAMPDIR)/stamp-install: build
 	rm -rf $(ZBS_STAGE_DIR) || true
