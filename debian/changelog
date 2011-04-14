@@ -1,3 +1,10 @@
+json-c (0.7-1.syslogng41.1) syslogngdeps30; urgency=low
+
+  * re-release for syslog-ng-deps-3.0
+  * non-linux buildig fixes.
+
+ -- Tamas Pal <folti@balabit.com>  Thu, 14 Apr 2011 17:57:21 +0200
+
 json-c (0.7-1) xcb10; urgency=low
 
   * Initial release
