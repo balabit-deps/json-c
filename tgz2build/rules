@@ -7,13 +7,16 @@ all: binary
 
 binary: setup configure build install
 
+ifneq (,$(findstring solaris,$(ZBS_DIST)))
+  LDFLAGS += -Wl,-R/opt/syslog-ng/lib
+endif
 setup:  $(STAMPDIR)/stamp-setup
 $(STAMPDIR)/stamp-setup:
 	mkdir tgz2build/stamps || true
 	touch $@
 
 configure: $(STAMPDIR)/stamp-configure
-	./configure $(CONFIGURE_OPTS)
+	LDFLAGS="$(LDFLAGS)" ./configure $(CONFIGURE_OPTS)
 	touch $@
 
 $(STAMPDIR)/stamp-configure: setup
