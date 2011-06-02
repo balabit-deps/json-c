@@ -1,3 +1,9 @@
+json-c (0.7-1.syslogng41.2) syslogngdeps30; urgency=low
+
+  * strndup no longer a missing symbol on older freebsd.
+
+ -- Tamas Pal <folti@balabit.com>  Thu, 02 Jun 2011 10:47:16 +0200
+
 json-c (0.7-1.syslogng41.1) syslogngdeps30; urgency=low
 
   * re-release for syslog-ng-deps-3.0
