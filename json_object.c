@@ -24,7 +24,7 @@
 #include "json_tokener.h"
 
 #if !HAVE_STRNDUP
-  char* strndup(const char* str, size_t n);
+  extern char* strndup(const char* str, size_t n);
 #endif /* !HAVE_STRNDUP */
 
 /* #define REFCOUNT_DEBUG 1 */
