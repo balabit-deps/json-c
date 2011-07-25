@@ -1,4 +1,5 @@
 AM_CFLAGS = -Wall -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+ACLOCAL_AMFLAGS=-I m4
 
 lib_LTLIBRARIES = libjson.la
 
