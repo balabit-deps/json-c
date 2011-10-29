@@ -1,17 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <string.h>
+#include <assert.h>
 
 #include "json.h"
 
+static int sort_fn (const void *j1, const void *j2)
+{
+  json_object **jso1, **jso2;
+  int i1, i2;
+
+  jso1 = j1;
+  jso2 = j2;
+  if (!*jso1 && !*jso2) {
+    return 0;
+  }
+  if (!*jso1) {
+    return -1;
+  }
+  if (!*jso2) {
+    return 1;
+  }
+
+  i1 = json_object_get_int(*jso1);
+  i2 = json_object_get_int(*jso2);
+
+  return i1 - i2;
+}
+
 int main(int argc, char **argv)
 {
-  struct json_tokener *tok;
-  struct json_object *my_string, *my_int, *my_object, *my_array;
-  struct json_object *new_obj;
+  json_tokener *tok;
+  json_object *my_string, *my_int, *my_object, *my_array;
+  json_object *new_obj;
   int i;
 
-  mc_set_debug(1);
+  MC_SET_DEBUG(1);
 
   my_string = json_object_new_string("\t");
   printf("my_string=%s\n", json_object_get_string(my_string));
@@ -38,7 +63,28 @@ int main(int argc, char **argv)
   json_object_array_put_idx(my_array, 4, json_object_new_int(5));
   printf("my_array=\n");
   for(i=0; i < json_object_array_length(my_array); i++) {
-    struct json_object *obj = json_object_array_get_idx(my_array, i);
+    json_object *obj = json_object_array_get_idx(my_array, i);
+    printf("\t[%d]=%s\n", i, json_object_to_json_string(obj));
+  }
+  printf("my_array.to_string()=%s\n", json_object_to_json_string(my_array));    
+
+  json_object_put(my_array);
+
+  my_array = json_object_new_array();
+  json_object_array_add(my_array, json_object_new_int(3));
+  json_object_array_add(my_array, json_object_new_int(1));
+  json_object_array_add(my_array, json_object_new_int(2));
+  json_object_array_put_idx(my_array, 4, json_object_new_int(0));
+  printf("my_array=\n");
+  for(i=0; i < json_object_array_length(my_array); i++) {
+    json_object *obj = json_object_array_get_idx(my_array, i);
+    printf("\t[%d]=%s\n", i, json_object_to_json_string(obj));
+  }
+  printf("my_array.to_string()=%s\n", json_object_to_json_string(my_array));    
+  json_object_array_sort(my_array, sort_fn);
+  printf("my_array=\n");
+  for(i=0; i < json_object_array_length(my_array); i++) {
+    json_object *obj = json_object_array_get_idx(my_array, i);
     printf("\t[%d]=%s\n", i, json_object_to_json_string(obj));
   }
   printf("my_array.to_string()=%s\n", json_object_to_json_string(my_array));    
@@ -51,7 +97,7 @@ int main(int argc, char **argv)
   json_object_object_add(my_object, "baz", json_object_new_string("bang"));
   json_object_object_add(my_object, "baz", json_object_new_string("fark"));
   json_object_object_del(my_object, "baz");
-  json_object_object_add(my_object, "arr", my_array);
+  /*json_object_object_add(my_object, "arr", my_array);*/
   printf("my_object=\n");
   json_object_object_foreach(my_object, key, val) {
     printf("\t%s: %s\n", key, json_object_to_json_string(val));
@@ -134,11 +180,21 @@ int main(int argc, char **argv)
   printf("new_obj.to_string()=%s\n", json_object_to_json_string(new_obj));
   json_object_put(new_obj);
 
+  enum json_tokener_error error = json_tokener_success;
+  new_obj = json_tokener_parse_verbose("{ foo }", &error);
+  assert (error == json_tokener_error_parse_object_key_name);
+  assert (new_obj == NULL);
+
   new_obj = json_tokener_parse("{ foo }");
-  if(is_error(new_obj)) printf("got error as expected\n");
+  assert (new_obj == NULL);
+  
+  // if(is_error(new_obj)) printf("got error as expected\n");
 
   new_obj = json_tokener_parse("foo");
-  if(is_error(new_obj)) printf("got error as expected\n");
+  assert (new_obj == NULL);
+  new_obj = json_tokener_parse_verbose("foo", &error);
+  assert (new_obj == NULL);
+  assert (error == json_tokener_error_parse_boolean);
 
   new_obj = json_tokener_parse("{ \"foo");
   if(is_error(new_obj)) printf("got error as expected\n");
@@ -157,7 +213,7 @@ int main(int argc, char **argv)
   json_object_put(my_string);
   json_object_put(my_int);
   json_object_put(my_object);
-  //json_object_put(my_array);
+  json_object_put(my_array);
 
   return 0;
 }

@@ -7,6 +7,10 @@
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the MIT license. See COPYING for details.
  *
+ *
+ * Copyright (c) 2008-2009 Yahoo! Inc.  All rights reserved.
+ * The copyrights to the contents of this file are licensed under the MIT License
+ * (http://www.opensource.org/licenses/mit-license.php)
  */
 
 #include "config.h"
@@ -25,14 +29,15 @@
 #include "debug.h"
 #include "printbuf.h"
 
-struct printbuf* printbuf_new()
+struct printbuf* printbuf_new(void)
 {
   struct printbuf *p;
 
-  if(!(p = calloc(1, sizeof(struct printbuf)))) return NULL;
+  p = (struct printbuf*)calloc(1, sizeof(struct printbuf));
+  if(!p) return NULL;
   p->size = 32;
   p->bpos = 0;
-  if(!(p->buf = malloc(p->size))) {
+  if(!(p->buf = (char*)malloc(p->size))) {
     free(p);
     return NULL;
   }
@@ -40,17 +45,17 @@ struct printbuf* printbuf_new()
 }
 
 
-int printbuf_memappend(struct printbuf *p, char *buf, int size)
+int printbuf_memappend(struct printbuf *p, const char *buf, int size)
 {
   char *t;
   if(p->size - p->bpos <= size) {
-    int new_size = max(p->size * 2, p->bpos + size + 8);
+    int new_size = json_max(p->size * 2, p->bpos + size + 8);
 #ifdef PRINTBUF_DEBUG
-    mc_debug("printbuf_memappend: realloc "
+    MC_DEBUG("printbuf_memappend: realloc "
 	     "bpos=%d wrsize=%d old_size=%d new_size=%d\n",
 	     p->bpos, size, p->size, new_size);
 #endif /* PRINTBUF_DEBUG */
-    if(!(t = realloc(p->buf, new_size))) return -1;
+    if(!(t = (char*)realloc(p->buf, new_size))) return -1;
     p->size = new_size;
     p->buf = t;
   }
@@ -115,17 +120,17 @@ int sprintbuf(struct printbuf *p, const char *msg, ...)
   /* if string is greater than stack buffer, then use dynamic string
      with vasprintf.  Note: some implementation of vsnprintf return -1
      if output is truncated whereas some return the number of bytes that
-     would have been writen - this code handles both cases. */
+     would have been written - this code handles both cases. */
   if(size == -1 || size > 127) {
-    int ret;
     va_start(ap, msg);
-    if((size = vasprintf(&t, msg, ap)) == -1) return -1;
+    if((size = vasprintf(&t, msg, ap)) < 0) { va_end(ap); return -1; }
     va_end(ap);
-    ret = printbuf_memappend(p, t, size);
+    printbuf_memappend(p, t, size);
     free(t);
-    return ret;
+    return size;
   } else {
-    return printbuf_memappend(p, buf, size);
+    printbuf_memappend(p, buf, size);
+    return size;
   }
 }
 

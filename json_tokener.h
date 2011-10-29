@@ -12,7 +12,12 @@
 #ifndef _json_tokener_h_
 #define _json_tokener_h_
 
+#include <stddef.h>
 #include "json_object.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum json_tokener_error {
   json_tokener_success,
@@ -79,11 +84,16 @@ struct json_tokener
 
 extern const char* json_tokener_errors[];
 
-extern struct json_tokener* json_tokener_new();
+extern struct json_tokener* json_tokener_new(void);
 extern void json_tokener_free(struct json_tokener *tok);
 extern void json_tokener_reset(struct json_tokener *tok);
-extern struct json_object* json_tokener_parse(char *str);
+extern struct json_object* json_tokener_parse(const char *str);
+extern struct json_object* json_tokener_parse_verbose(const char *str, enum json_tokener_error *error);
 extern struct json_object* json_tokener_parse_ex(struct json_tokener *tok,
-						 char *str, int len);
+						 const char *str, int len);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
