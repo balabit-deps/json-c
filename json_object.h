@@ -36,8 +36,11 @@ struct json_object_iter
 };
 
 /* forward structure definitions */
-
+#ifndef _WIN32
 typedef int boolean;
+#else
+typedef unsigned char boolean;
+#endif
 typedef struct printbuf printbuf;
 typedef struct lh_table lh_table;
 typedef struct array_list array_list;
