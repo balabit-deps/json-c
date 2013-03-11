@@ -1,0 +1,41 @@
+#!/usr/local/bin/make -f
+STAMPDIR=winbuild/stamps
+
+CONFIGURE_OPTS := --prefix $(ZBS_STAGE_DIR)
+ifneq (,$(build))
+CONFIGURE_OPTS += --build=$(build)
+endif
+
+all: binary
+
+binary: setup configure build install
+
+ifneq (,$(findstring solaris,$(ZBS_DIST)))
+  LDFLAGS += -Wl,-R/opt/syslog-ng/lib
+endif
+setup:  $(STAMPDIR)/stamp-setup
+$(STAMPDIR)/stamp-setup:
+	mkdir winbuild/stamps || true
+	touch $@
+
+configure: $(STAMPDIR)/stamp-configure
+$(STAMPDIR)/stamp-configure: setup
+	LDFLAGS="$(LDFLAGS)" ./configure $(CONFIGURE_OPTS)
+	touch $@
+
+build:  $(STAMPDIR)/stamp-build
+$(STAMPDIR)/stamp-build: configure
+	$(MAKE)
+	touch $@
+
+install: $(STAMPDIR)/stamp-install
+$(STAMPDIR)/stamp-install: build
+	rm -rf $(ZBS_STAGE_DIR) || true
+	$(MAKE) install
+	touch $@
+clean:
+	rm -rf winbuild/stamps || true
+	rm -rf winbuild/staging || true
+	-$(MAKE) clean
+
+.PHONY: build clean binary-indep binary-arch binary install

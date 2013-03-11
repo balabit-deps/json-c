@@ -18,11 +18,49 @@ extern "C" {
 
 #define JSON_OBJECT_DEF_HASH_ENTRIES 16
 
+#ifdef __hpux__
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#else
+
 #undef FALSE
 #define FALSE ((boolean)0)
 
 #undef TRUE
 #define TRUE ((boolean)1)
+
+#endif /* __hpux__ */
+
+#ifdef  __alpha   /* Tru64 Unix does not define these */
+#ifndef INT32_MIN
+#define INT32_MIN INT_MIN
+#endif
+#ifndef INT32_MAX
+#define INT32_MAX INT_MAX
+#endif
+#ifndef INT64_MIN
+#define INT64_MIN LONG_MIN
+#endif
+#ifndef INT64_MAX
+#define INT64_MAX LONG_MAX
+#endif
+#ifndef UINT32_MAX
+#define UINT32_MAX  UINT_MAX
+#endif
+#ifndef UINT64_MAX
+#define UINT64_MAX  ULONG_MAX
+#endif
+#define PRId64 "ld"
+#define PRIu64 "lu"
+#define SCNd64 "ld"
+#endif  /* __alpha */
 
 extern const char *json_number_chars;
 extern const char *json_hex_chars;

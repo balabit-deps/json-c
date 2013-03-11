@@ -1,0 +1,5 @@
+lib/*.dll
+lib/*.la
+lib/*.a
+include/json/*
+lib/pkgconfig/*
