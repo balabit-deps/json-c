@@ -1,3 +1,8 @@
+json-c (0.10-1.syslogngdeps50.1) syslogngdeps50; urgency=low
+  * release for syslog-ng-5.0
+
+ -- Laszlo Budai <lbudai@balabit.com>  Wed, 11 Sep 2013 12:26:01 +0200
+
 json-c (0.10-1.syslogngdeps40.1) syslogngdeps40; urgency=low
 
   * Updated to json-c 0.9
