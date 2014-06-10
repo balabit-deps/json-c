@@ -1,3 +1,9 @@
+json-c (0.10-1.syslogng52.1) syslogng52; urgency=low
+
+  * release for syslog-ng-5.2
+
+ -- jviktor <jviktor@devel-57>  Tue, 10 Jun 2014 13:44:00 +0200
+
 json-c (0.10-1.syslogngdeps51.1) syslogngdeps51; urgency=low
   * release for syslog-ng-5.1
 
