@@ -27,5 +27,7 @@ mkinstalldirs
 compile
 gtk-doc.make
 *~
-b
-smake/*.pyc
+sbuild/build
+sbuild/*.pyc
+sbuild.py
+
