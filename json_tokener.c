@@ -464,8 +464,10 @@ struct json_object* json_tokener_parse_ex(struct json_tokener *tok,
                       (str[1] == '\\') &&
                       (str[2] == 'u'))
                   {
-	            ADVANCE_CHAR(str, tok);
-	            ADVANCE_CHAR(str, tok);
+		    if (!ADVANCE_CHAR(str, tok))
+		      goto out;
+		    if (!ADVANCE_CHAR(str, tok))
+		      goto out;
 
                     /* Advance to the first char of the next sequence and
                      * continue processing with the next sequence.
