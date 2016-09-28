@@ -27,7 +27,8 @@ mkinstalldirs
 compile
 gtk-doc.make
 *~
-sbuild/build
-sbuild/*.pyc
+sbuild/*
+!sbuild/config.yml
 sbuild.py
-
+m4
+test-driver
