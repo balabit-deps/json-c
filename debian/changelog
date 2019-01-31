@@ -1,0 +1,15 @@
+json-c (0.10-1.syslogngdeps40.1) syslogngdeps40; urgency=low
+
+  * Updated to json-c 0.9
+  * Upstream is tracked via a git repo instead of importing the release
+    tarball (merged into master when needed).
+
+ -- Balazs Scheidler <bazsi@balabit.com>  Sat, 29 Oct 2011 16:59:33 +0200
+
+json-c (0.7-1.syslogng41.2) syslogngdeps30; urgency=low
+
+  * strndup no longer a missing symbol on older freebsd.
+
+ -- Tamas Pal <folti@balabit.com>  Thu, 02 Jun 2011 10:47:16 +0200
+
+
