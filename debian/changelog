@@ -1,3 +1,9 @@
+json-c (0.13.1.syslogng70.1) syslogng70; urgency=low
+
+  * Updated to json-c 0.13
+
+ -- Laszlo Budai <laszlo.budai@balabit.com>  Thu, 31 Jan 2019 12:05:48 +0100
+
 json-c (0.10-1.syslogngdeps40.1) syslogngdeps40; urgency=low
 
   * Updated to json-c 0.9
