@@ -1,3 +1,10 @@
+json-c (0.13.1.syslogng70.2) syslogng70; urgency=low
+
+  * fix path 
+
+ -- Laszlo Budai <laszlo.budai@balabit.com>  Thu, 31 Jan 2019 14:58:47 +0100
+
+
 json-c (0.13.1.syslogng70.1) syslogng70; urgency=low
 
   * Updated to json-c 0.13
