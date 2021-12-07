@@ -110,3 +110,6 @@
 /include
 /libjson-c.a
 /libjson-c.so
+
+sbuild/*
+!sbuild/config.yml
